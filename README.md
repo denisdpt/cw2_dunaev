@@ -52,80 +52,84 @@ gmake[2]: Leaving directory '/home/denis/Documents/vs/paral_bfs/build'
 gmake[1]: Leaving directory '/home/denis/Documents/vs/paral_bfs/build'
 ln -sf build/compile_commands.json compile_commands.json
 --------------------------
+
 denis@denis-MS-7C52:~/Documents/vs/paral_bfs$ make run
-PARLAY_NUM_THREADS=4 ./build/main
+OMP_PROC_BIND=true OMP_PLACES=cores PARLAY_NUM_THREADS=4 \
+./build/main --side 300 --runs 5 --threads 4
+Running correctness tests...
+[PASS] empty_graph
+[PASS] single_vertex
+[PASS] path_graph
+[PASS] cycle_graph
+[PASS] star_graph
+[PASS] two_components
+[PASS] self_loops
+[PASS] complete_graph
+[PASS] isolated_vertex
+[PASS] directed_like
+All fixed tests passed.
+[PASS] random_graph_0
+[PASS] random_graph_1
+[PASS] random_graph_2
+[PASS] random_graph_3
+[PASS] random_graph_4
+[PASS] random_graph_5
+[PASS] random_graph_6
+[PASS] random_graph_7
+[PASS] random_graph_8
+[PASS] random_graph_9
+[PASS] random_graph_10
+[PASS] random_graph_11
+[PASS] random_graph_12
+[PASS] random_graph_13
+[PASS] random_graph_14
+[PASS] random_graph_15
+[PASS] random_graph_16
+[PASS] random_graph_17
+[PASS] random_graph_18
+[PASS] random_graph_19
+All random tests passed.
+[PASS] cube_csr_seq_vs_par_src=0
+[PASS] cube_adj_seq_vs_par_src=0
+[PASS] cube_csr_vs_adj_seq_src=0
+[PASS] cube_csr_seq_vs_par_src=219
+[PASS] cube_adj_seq_vs_par_src=219
+[PASS] cube_csr_vs_adj_seq_src=219
+[PASS] cube_csr_seq_vs_par_src=455
+[PASS] cube_adj_seq_vs_par_src=455
+[PASS] cube_csr_vs_adj_seq_src=455
+Cube consistency tests passed.
+All tests passed.
 Building CSR cube (300^3) ...
-CSR built: n=27000000, m=161460000
+CSR built: n=27000000, m(directed)=161460000
 
 --- RUN 1 ---
-SEQ: 4560.2 ms
-PAR(4): 2546.33 ms
-SPEEDUP: 1.79089
+SEQ: 5726 ms
+PAR(4): 1849.67 ms
+SPEEDUP: 3.09569
 
 --- RUN 2 ---
-SEQ: 4629.17 ms
-PAR(4): 2486.97 ms
-SPEEDUP: 1.86137
+SEQ: 5278.48 ms
+PAR(4): 1814.18 ms
+SPEEDUP: 2.90957
 
 --- RUN 3 ---
-SEQ: 5066.45 ms
-PAR(4): 2560.66 ms
-SPEEDUP: 1.97857
+SEQ: 5209.37 ms
+PAR(4): 1727.86 ms
+SPEEDUP: 3.01493
 
 --- RUN 4 ---
-SEQ: 5129.74 ms
-PAR(4): 2534.32 ms
-SPEEDUP: 2.02411
+SEQ: 5348.74 ms
+PAR(4): 1720.53 ms
+SPEEDUP: 3.10879
 
 --- RUN 5 ---
-SEQ: 4959.37 ms
-PAR(4): 2506.89 ms
-SPEEDUP: 1.9783
+SEQ: 4975.24 ms
+PAR(4): 1657.99 ms
+SPEEDUP: 3.00076
 
 --------------------------
-avg seq: 4868.99 ms
-avg par: 2527.03 ms
-avg speedup: 1.92676
---------------------------
-denis@denis-MS-7C52:~/Documents/vs/paral_bfs$ 
-
-_________________________
-
-denis@denis-MS-7C52:~/Documents/vs/paral_bfs$ export OMP_PROC_BIND=true
-denis@denis-MS-7C52:~/Documents/vs/paral_bfs$ export OMP_PLACES=cores
-denis@denis-MS-7C52:~/Documents/vs/paral_bfs$ make run PARLAY_NUM_THREADS=4
-denis@denis-MS-7C52:~/Documents/vs/paral_bfs$ make run PARLAY_NUM_THREADS=4
-PARLAY_NUM_THREADS=4 ./build/main
-Building CSR cube (300^3) ...
-CSR built: n=27000000, m=161460000
-
---- RUN 1 ---
-SEQ: 5721.56 ms
-PAR(4): 1647.63 ms
-SPEEDUP: 3.47259
-
---- RUN 2 ---
-SEQ: 5138.32 ms
-PAR(4): 1612.88 ms
-SPEEDUP: 3.1858
-
---- RUN 3 ---
-SEQ: 4748.01 ms
-PAR(4): 1624.78 ms
-SPEEDUP: 2.92225
-
---- RUN 4 ---
-SEQ: 5273.91 ms
-PAR(4): 1596.55 ms
-SPEEDUP: 3.30332
-
---- RUN 5 ---
-SEQ: 5179.71 ms
-PAR(4): 1606.94 ms
-SPEEDUP: 3.22333
-
---------------------------
-avg seq: 5212.3 ms
-avg par: 1617.76 ms
-avg speedup: 3.22193
+avg seq: 5307.57 ms
+avg par: 1754.05 ms
+avg speedup: 3.02595
 --------------------------
