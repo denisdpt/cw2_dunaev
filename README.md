@@ -88,3 +88,44 @@ avg par: 2527.03 ms
 avg speedup: 1.92676
 --------------------------
 denis@denis-MS-7C52:~/Documents/vs/paral_bfs$ 
+
+_________________________
+
+denis@denis-MS-7C52:~/Documents/vs/paral_bfs$ export OMP_PROC_BIND=true
+denis@denis-MS-7C52:~/Documents/vs/paral_bfs$ export OMP_PLACES=cores
+denis@denis-MS-7C52:~/Documents/vs/paral_bfs$ make run PARLAY_NUM_THREADS=4
+denis@denis-MS-7C52:~/Documents/vs/paral_bfs$ make run PARLAY_NUM_THREADS=4
+PARLAY_NUM_THREADS=4 ./build/main
+Building CSR cube (300^3) ...
+CSR built: n=27000000, m=161460000
+
+--- RUN 1 ---
+SEQ: 5721.56 ms
+PAR(4): 1647.63 ms
+SPEEDUP: 3.47259
+
+--- RUN 2 ---
+SEQ: 5138.32 ms
+PAR(4): 1612.88 ms
+SPEEDUP: 3.1858
+
+--- RUN 3 ---
+SEQ: 4748.01 ms
+PAR(4): 1624.78 ms
+SPEEDUP: 2.92225
+
+--- RUN 4 ---
+SEQ: 5273.91 ms
+PAR(4): 1596.55 ms
+SPEEDUP: 3.30332
+
+--- RUN 5 ---
+SEQ: 5179.71 ms
+PAR(4): 1606.94 ms
+SPEEDUP: 3.22333
+
+--------------------------
+avg seq: 5212.3 ms
+avg par: 1617.76 ms
+avg speedup: 3.22193
+--------------------------
