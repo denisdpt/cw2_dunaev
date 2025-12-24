@@ -353,6 +353,70 @@ static bool run_random_tests() { // случайные графы (фиксир�
     if (!expect_eq("random_graph_" + std::to_string(t), seq, par)) return false;
   }
 
+  {
+    const uint32_t n = 200'000;
+    AdjListGraph g;
+    g.adj.assign(n, {});
+    g.adj[0].reserve(n - 1);
+
+    for (uint32_t v = 1; v < n; ++v) {
+      g.adj[0].push_back(v);
+      g.adj[v].push_back(0);
+    }
+
+    auto seq = bfs_seq(g, 0);
+    auto par = bfs_par_fast(g, 0, 4);
+    if (!expect_eq("large_star_n=" + std::to_string(n), seq, par)) return false; // большая звезда
+  }
+
+  {
+    const uint32_t n = 200'000;
+    const uint32_t half = n / 2;
+
+    AdjListGraph g;
+    g.adj.assign(n, {});
+
+    for (uint32_t i = 0; i + 1 < half; ++i) {
+      g.adj[i].push_back(i + 1);
+      g.adj[i + 1].push_back(i);
+    }
+    for (uint32_t i = half; i + 1 < n; ++i) {
+      g.adj[i].push_back(i + 1);
+      g.adj[i + 1].push_back(i);
+    }
+
+    const NodeId src = 0;
+    auto seq = bfs_seq(g, src);
+    auto par = bfs_par_fast(g, src, 4);
+    if (!expect_eq("large_two_components_path_n=" + std::to_string(n), seq, par)) return false; // две компоненты связности
+  }
+
+  {
+    const uint32_t n = 150'000;
+    const uint32_t m = 600'000;
+    const bool undirected = true;
+
+    AdjListGraph g;
+    g.adj.assign(n, {});
+
+    const uint32_t avg_deg = (undirected ? (2 * m) / n : m / n);
+    for (auto& v : g.adj) v.reserve((size_t)avg_deg + 2);
+
+    std::uniform_int_distribution<uint32_t> vd(0, n - 1);
+    for (uint32_t i = 0; i < m; ++i) {
+      uint32_t a = vd(rng);
+      uint32_t b = vd(rng);
+      if (a == b) continue;
+      g.adj[a].push_back(b);
+      if (undirected) g.adj[b].push_back(a);
+    }
+
+    const NodeId src = vd(rng);
+    auto seq = bfs_seq(g, src);
+    auto par = bfs_par_fast(g, src, 4);
+    if (!expect_eq("large_random_sparse_undirected_n=" + std::to_string(n) + "_m=" + std::to_string(m), seq, par)) return false; // большой разреженный случайный граф
+  }
+
   std::cout << "All random tests passed.\n";
   return true;
 }
@@ -373,7 +437,6 @@ static bool run_cube_consistency_test() { // проверкяем любой г�
     auto par_adj = bfs_par_fast(adj, s, 4);
     if (!expect_eq("cube_adj_seq_vs_par_src=" + std::to_string(s), seq_adj, par_adj)) return false;
 
-    // сравним CSR и adjacency list (должны совпасть)
     if (!expect_eq("cube_csr_vs_adj_seq_src=" + std::to_string(s), seq_csr, seq_adj)) return false;
   }
 
@@ -425,14 +488,12 @@ static Args parse(int argc, char** argv) {
 int main(int argc, char** argv) {
   Args a = parse(argc, argv);
 
-  // 1) Tests (required by assignment)
   std::cout << "Running correctness tests...\n";
   if (!run_all_tests()) return 1;
   std::cout << "All tests passed.\n";
 
   if (a.skip_bench) return 0;
 
-  // 2) Benchmark (required by assignment): cube 300^3, source (0,0,0) -> 0, runs=5
   std::cerr << "Building CSR cube (" << a.side << "^3) ...\n";
   auto g = build_cube_csr(a.side);
   std::cerr << "CSR built: n=" << g.n << ", m(directed)=" << g.m_directed() << "\n";
